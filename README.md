@@ -1,64 +1,120 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# About Api-mutiple-choice
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Api-mutiple-choice is a web application
+<br>
 
-## About Laravel
+## Environment require
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+-   [Laravel 9](https://laravel.com/docs/9.x/releases)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+-   [Laradock](https://laradock.io/)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+-   [PHP 8.1](https://www.php.net/releases/8.1/en.php)
 
-## Learning Laravel
+-   [MySql 8.0](https://dev.mysql.com/doc/relnotes/mysql/8.0/en/)
+    <br>
+    <br>
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Extended commands
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```
+    php artisan make:trait {name}
+    php artisan make:service {name}
+    php artisan make:enum {name}
+    php artisan make:repository {folderName}
+```
 
-## Laravel Sponsors
+<br>
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Installation
 
-### Premium Partners
+Clone OneStack-Laravel repository
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+```bash
+    git@github.com:manh-cuong61/backend_mutiple-choice-test.git
+```
 
-## Contributing
+Clone and update git submodule
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+    git submodule init
+    git submodule update --init --recursive
+```
 
-## Code of Conduct
+In Project folder
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+    cp .env.dev .env
+```
 
-## Security Vulnerabilities
+Init & Run Laradock
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+-   Config .env of Laradock
 
-## License
+```bash
+    cp laradock.env.example laradock/.env
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+-   Run docker
+
+```bash
+    cd laradock
+    docker-compose up -d nginx mysql workspace
+```
+
+-   In /laradock folder install composer
+
+```bash
+    docker-compose exec workspace bash
+    composer install
+```
+
+-   Run migration
+
+```bash
+    docker-compose exec workspace php artisan migrate
+```
+
+-   See result
+
+```
+    open browser with url: http://localhost
+```
+
+<br>
+
+## VsCode extensions
+
+-   Prettier
+-   EditorConfig for VS Code
+-   PHP Intelephense
+-   Laravel Ide Helper (optional)
+-   Laravel extension pack (optional)
+-   Auto close tag (optional)
+-   Auto rename tag (optional)
+    <br>
+
+## Các quy định chung trong việc thực hiện code:
+
+-   Đặt tên cho các key trả về của response theo định dạng snake_case. Ví dụ:
+
+```
+{
+    data: {
+        ...
+    },
+    message: '',
+    error_code: ''
+}
+```
+
+-   Quy định chung cho route resource (CRUD) tuân theo quy tắc của Laravel. Ví dụ: <br/>
+    Method get: /users: List <br/>
+    Method get: /users/1: Detail <br/>
+    Method post: /users: Create <br/>
+    Method put/patch: /users/1: Update <br/>
+    Method delete: /users/1: Delete <br/>
+
+-   Quy định đặt tên cho route theo định dạng kebab-case. Ví dụ: <br/>
+    /users/change-name <br/>
+    /users/change-password

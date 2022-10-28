@@ -18,7 +18,7 @@ class CreateUserExamsTable extends Migration
             $table->integer('user_id');
             $table->integer('exam_id');
             $table->integer('number_of_times');
-            $table->integer('time_out');
+            $table->integer('time_done');
             $table->timestamps();
         });
     }
