@@ -28,7 +28,7 @@ Api-mutiple-choice is a web application
 
 ## Installation
 
-Clone OneStack-Laravel repository
+Clone Api-mutiple-choice repository
 
 ```bash
     git@github.com:manh-cuong61/backend_mutiple-choice-test.git
@@ -44,7 +44,7 @@ Clone and update git submodule
 In Project folder
 
 ```bash
-    cp .env.dev .env
+    cp .env.example .env
 ```
 
 Init & Run Laradock
@@ -69,10 +69,10 @@ Init & Run Laradock
     composer install
 ```
 
--   Run migration
+-   Run migration and seed data
 
 ```bash
-    docker-compose exec workspace php artisan migrate
+    docker-compose exec workspace php artisan migrate --seed
 ```
 
 -   See result
