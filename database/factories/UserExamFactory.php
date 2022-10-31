@@ -15,7 +15,7 @@ class UserExamFactory extends Factory
     {
         return [
             'number_of_times' => $this->faker->numberBetween(1, 5),
-            'time_out' => $this->faker->numberBetween(10, 90),
+            'time_done' => $this->faker->numberBetween(10, 90),
         ];
     }
 }
