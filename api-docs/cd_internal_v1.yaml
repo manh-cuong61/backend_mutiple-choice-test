@@ -1,0 +1,2233 @@
+openapi: 3.0.1
+info:
+  title: Swagger cd-internal
+  description: Swagger OpenApi of cd-internal
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://127.0.0.1:5500/api/v1
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Authorize
+      summary: Đăng nhập
+      operationId: login
+      externalDocs:
+        description: sheet "xử lý login"
+        url: https://alobridgevn.sharepoint.com/:x:/r/sites/AlobridgeVN/_layouts/15/Doc.aspx?action=edit&sourcedoc=%7B7bc68561-88e5-4503-bfcf-7b7aec155042%7D&wdOrigin=TEAMS-ELECTRON.teamsSdk.openFilePreview&wdExp=TEAMS-CONTROL&web=1
+      requestBody:
+        description: Đăng nhập tài khoản đã có
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: email phải đúng định dạng, xem lỗi email_invalid
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        200:
+          description: Request successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/AccessToken"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        422:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/422"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+  /auth/remind-password:
+    post:
+      tags:
+        - Authorize
+      summary: Quên mật khẩu
+      operationId: forgot-password
+      externalDocs:
+        url: https://alobridgevn.sharepoint.com/:x:/r/sites/AlobridgeVN/_layouts/15/Doc.aspx?action=edit&sourcedoc=%7B4a3da747-a353-4f3b-9e86-e2eb53adc3fb%7D&wdOrigin=TEAMS-ELECTRON.teamsSdk.openFilePreview&wdExp=TEAMS-CONTROL&web=1
+      requestBody:
+        description: Gửi thông tin email đã đăng kí để reset mật khẩu
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: email phải đúng định dạng, xem lỗi email_invalid
+              required:
+                - email
+      responses:
+        200:
+          description: Request successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: ""
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        422:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/422"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+  /auth/reset-password:
+    get:
+      tags:
+        - Authorize
+      summary: Kiểm tra reset password token
+      parameters:
+        - in: query
+          name: verify_token
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: Request successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: ""
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        422:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/422"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+    post:
+      tags:
+        - Authorize
+      summary: Reset mật khẩu
+      externalDocs:
+        url: https://alobridgevn.sharepoint.com/:x:/r/sites/AlobridgeVN/_layouts/15/Doc.aspx?action=edit&sourcedoc=%7Bd220a569-a6b0-45eb-8992-9d93c383ba9f%7D&wdOrigin=TEAMS-ELECTRON.teamsSdk.openFilePreview&wdExp=TEAMS-CONTROL&web=1&cid=6057f458-2057-4fe3-9e39-6431f0c36c9e
+      requestBody:
+        description: Gửi thông tin mật khẩu mới để reset mật khẩu
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  description: xem lỗi password_invalid
+                verify_token:
+                  type: string
+                  description: token lấy từ url và có hạn trong 24h, xem lỗi token_invalid
+              required:
+                - password
+                - token
+      responses:
+        200:
+          description: Request successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: ""
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        422:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/422"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+  /auth/refresh-token:
+    post:
+      tags:
+        - Authorize
+      summary: Refresh access token
+      operationId: refresh_token
+      security:
+        - user_auth: []
+
+      responses:
+        200:
+          description: Request successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccessToken"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        422:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/422"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+  /auth/logout:
+    delete:
+      tags:
+        - Authorize
+      summary: Đăng xuất
+      operationId: logout
+      security:
+        - user_auth: []
+      responses:
+        200:
+          description: Request successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: ""
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: "Ngoài lỗi mặc định, có thể có lỗi token_invalid"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        422:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/422"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+  /change-password:
+    post:
+      security:
+        - user_auth: []
+      tags:
+        - Authorize
+      summary: Thay đổi mật khẩu
+      operationId: change-password
+      externalDocs:
+        url: https://alobridgevn.sharepoint.com/:x:/r/sites/AlobridgeVN/_layouts/15/Doc.aspx?action=edit&sourcedoc=%7B620c8130-06df-489d-afb8-8a26841160e6%7D&wdOrigin=TEAMS-WEB.teamsSdk.openFilePreview&wdExp=TEAMS-CONTROL&web=1
+      requestBody:
+        description: （Gửi thông tin mật khẩu mới để thay đổi mật khẩu）
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                old_password:
+                  type: string
+                  description: Mật khẩu hiện tại của người đăng nhập
+                new_password:
+                  type: string
+                  description: Mật khẩu mới muốn thay đổi
+                confirm_new_password:
+                  type: string
+                  description: Xác nhận mật khẩu muốn thay đổi
+              required:
+                - old_password
+                - new_password
+                - confirm_password
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Change password successfully"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: "デフォルトエラー以外token_invalidのエラーが発生する可能性がある（Ngoài lỗi mặc định, có thể có lỗi token_invalid）"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        422:
+          description: "デフォルトエラー以外password_invalidのエラーが発生する可能性がある（Ngoài lỗi mặc định, có thể có lỗi password_invalid）"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/422"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+  /apps:
+    get:
+      tags:
+        - Applications
+      summary: Lấy applications
+      operationId: applications
+
+      security:
+        - user_auth: []
+      responses:
+        200:
+          description: Request successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  allOf:
+                    - $ref: "#/components/schemas/ApplicationShortDetail"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        422:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/422"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+    post:
+      tags:
+        - Applications
+      summary: Tạo applications mới
+      operationId: create_application
+      externalDocs:
+        description: sheet "Xử lý tạo mới applications"
+        url: https://alobridgevn.sharepoint.com/:x:/r/sites/AlobridgeVN/_layouts/15/Doc.aspx?action=edit&sourcedoc=%7Bdf2cd858-70c1-426e-9906-28dbf8ebef16%7D&wdOrigin=TEAMS-WEB.teamsSdk.openFilePreview&wdExp=TEAMS-CONTROL&web=1
+      security:
+        - admin_auth: []
+      requestBody:
+        description: Gửi thông tin để tạo mới 1 application
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                app_name:
+                  type: string
+                  description: Tên của application (unique)
+                ios_name:
+                  type: string
+                  description: Tên phiên bản iOS của application (unique,required nếu android_name trống)
+                android_name:
+                  type: string
+                  description: Tên phiên bản Android của application (unique,required nếu ios_name trống)
+              required:
+                - app_name
+                - ios_name
+                - android_name
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Create applications successfully"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        403:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/403"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+  /apps/{app_id}:
+    get:
+      tags:
+        - Applications
+      summary: Chi tiết application
+      externalDocs:
+        description: sheet "Xử lý ban đầu"
+        url: https://alobridgevn.sharepoint.com/:x:/s/AlobridgeVN/ES0whH-MKIhOm2LxaNMHjasBaZ7tJ1kBWgzuKnK6DOoZSw?e=lCWYjL
+      security:
+        - admin_auth: []
+      parameters:
+        - in: path
+          name: app_id
+          schema:
+            type: integer
+          example: 1
+          required: true
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApplicationDetail"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        403:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/403"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+    put:
+      tags:
+        - Applications
+      summary: Update thông tin application
+      externalDocs:
+        description: sheet "Xử lý update application"
+        url: https://alobridgevn.sharepoint.com/:x:/s/AlobridgeVN/ES0whH-MKIhOm2LxaNMHjasBaZ7tJ1kBWgzuKnK6DOoZSw?e=lCWYjL
+      security:
+        - admin_auth: []
+      parameters:
+        - in: path
+          name: app_id
+          schema:
+            type: integer
+          example: 1
+          required: true
+      requestBody:
+        description: Gửi thông tin update lại application
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                app_name:
+                  type: string
+                  description: Tên application
+                ios_build_name:
+                  type: string
+                  description: Tên iOS build
+                android_build_name:
+                  type: string
+                  description: Tên android build
+              required:
+                - app_name
+
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Update application successfully"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        403:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/403"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        422:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/422"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+    delete:
+      tags:
+        - Applications
+      summary: Delete application
+      externalDocs:
+        description: sheet "Xử lý xóa application"
+        url: https://alobridgevn.sharepoint.com/:x:/s/AlobridgeVN/ES0whH-MKIhOm2LxaNMHjasBaZ7tJ1kBWgzuKnK6DOoZSw?e=lCWYjL
+      security:
+        - admin_auth: []
+      parameters:
+        - in: path
+          name: app_id
+          schema:
+            type: integer
+          example: 1
+          required: true
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Delete application successfully"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        403:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/403"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+  /apps/{app_id}/build-numbers:
+    post:
+      tags:
+        - Applications
+      summary: Upload version build mới cho application
+      operationId: upload_version
+      externalDocs:
+        description: sheet "Xử lý upload version"
+        url: https://alobridgevn.sharepoint.com/:x:/r/sites/AlobridgeVN/_layouts/15/Doc.aspx?action=edit&sourcedoc=%7Bd320e6c6-0d33-410c-85cd-097f8a242db9%7D&wdOrigin=TEAMS-WEB.teamsSdk.openFilePreview&wdExp=TEAMS-CONTROL&web=1
+      security:
+        - admin_auth: []
+      parameters:
+        - in: path
+          name: app_id
+          schema:
+            type: integer
+          example: 1
+          required: true
+      requestBody:
+        description: Gửi thông tin file upload về server
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                build_number:
+                  type: integer
+                  description: Đánh số bản ghi version được upload
+                app_name:
+                  type: string
+                  description: Tên application chứa bản ghi version được upload
+                file:
+                  type: string
+                  format: binary
+                  description: File version được upload
+              required:
+                - build_number
+                - app_name
+                - file
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    default: true
+                  message:
+                    type: string
+                    example: "Upload version successfully"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        403:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/403"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+    get:
+      tags:
+        - Applications
+      summary: Lấy danh sách các bản build của Applications
+      operationId: previous_version
+      externalDocs:
+        description: sheet "Xử lý ban đầu"
+        url: https://alobridgevn.sharepoint.com/:x:/r/sites/AlobridgeVN/_layouts/15/Doc.aspx?action=edit&sourcedoc=%7Bd320e6c6-0d33-410c-85cd-097f8a242db9%7D&wdOrigin=TEAMS-WEB.teamsSdk.openFilePreview&wdExp=TEAMS-CONTROL&web=1
+      security:
+        - admin_auth: []
+      parameters:
+        - in: path
+          name: app_id
+          schema:
+            type: integer
+          example: 1
+          required: true
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PreviousBuildVersion"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        403:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/403"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+  /apps/{app_id}/old-build-numbers:
+    delete:
+      tags:
+        - Applications
+      summary: Xóa các bản build version cũ của application
+      operationId: delete_old_version
+      externalDocs:
+        description: sheet "Xử lý delete version"
+        url: https://alobridgevn.sharepoint.com/:x:/r/sites/AlobridgeVN/_layouts/15/Doc.aspx?action=edit&sourcedoc=%7Bd320e6c6-0d33-410c-85cd-097f8a242db9%7D&wdOrigin=TEAMS-WEB.teamsSdk.openFilePreview&wdExp=TEAMS-CONTROL&web=1
+      security:
+        - admin_auth: []
+      parameters:
+        - in: path
+          name: app_id
+          schema:
+            type: integer
+          example: 1
+          required: true
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    default: true
+                  message:
+                    type: string
+                    example: "Delete old version successfully"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        403:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/403"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+  /apps/{app_id}/build-numbers/{build_number_id}:
+    delete:
+      tags:
+        - Applications
+      summary: Xóa 1 build version của application
+      operationId: delete_item_version
+      externalDocs:
+        description: sheet "Xử lý delete version"
+        url: https://alobridgevn.sharepoint.com/:x:/r/sites/AlobridgeVN/_layouts/15/Doc.aspx?action=edit&sourcedoc=%7Bd320e6c6-0d33-410c-85cd-097f8a242db9%7D&wdOrigin=TEAMS-WEB.teamsSdk.openFilePreview&wdExp=TEAMS-CONTROL&web=1
+      security:
+        - admin_auth: []
+      parameters:
+        - in: path
+          name: build_number_id
+          schema:
+            type: integer
+          example: 1
+          required: true
+        - in: path
+          name: app_id
+          schema:
+            type: integer
+          example: 1
+          required: true
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    default: true
+                  message:
+                    type: string
+                    example: "Delete build version successfully"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        403:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/403"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+  /apps/{app_id}/members:
+    post:
+      tags:
+        - Applications
+      summary: Mời members vào application
+      externalDocs:
+        description: sheet "xử lí invite members"
+        url: https://alobridgevn.sharepoint.com/:x:/s/AlobridgeVN/ESfpFLcfqgpAg1w5gg_a9PgBa5JWWJT3CXYlQ7No2WIqew?e=ou1JtD
+      security:
+        - admin_auth: []
+      requestBody:
+        description: Gửi thông tin để mời các members vào application
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tester_ids:
+                  type: array
+                  description: id của các members muốn mời
+                  items:
+                    tester_id: integer
+              required:
+                - app_id
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Invite members successfully"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        403:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/403"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        422:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/422"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+  /apps/{app_id}/build-number-version/{buildNumberVersion_id}:
+    get:
+      tags:
+        - Applications
+      summary: Chi tiết build number version của application
+      externalDocs:
+        description: sheet "Xử lý ban đầu"
+        url: https://alobridgevn.sharepoint.com/:x:/s/AlobridgeVN/ESfpFLcfqgpAg1w5gg_a9PgBa5JWWJT3CXYlQ7No2WIqew?e=yD5mgR
+      security:
+        - user_auth: []
+      parameters:
+        - in: path
+          name: app_id
+          schema:
+            type: integer
+          example: 1
+          required: true
+        - in: path
+          name: buildNumberVersion_id
+          schema:
+            type: integer
+          example: 1
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  app_name:
+                    type: string
+                  ios_build:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      build_number:
+                        type: integer
+                      build_date:
+                        type: string
+                      bundle_id:
+                        type: string
+                      app_icon:
+                        type: string
+                      uuid_list:
+                        type: array
+                        items:
+                          uuid: string
+                  ios_previous:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/BuildNumberDetail"
+                  android_build:
+                    $ref: "#/components/schemas/BuildNumberDetail"
+                  android_previous:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/BuildNumberDetail"
+                  members:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        avatar:
+                          type: string
+
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+  /apps/{app_id}/members/{member_id}:
+    delete:
+      tags:
+        - Applications
+      summary: Delete member có trong application
+      externalDocs:
+        description: sheet "delete member"
+        url: https://alobridgevn.sharepoint.com/:x:/s/AlobridgeVN/ESfpFLcfqgpAg1w5gg_a9PgBa5JWWJT3CXYlQ7No2WIqew?e=irAmtE
+      security:
+        - admin_auth: []
+      parameters:
+        - in: path
+          name: app_id
+          schema:
+            type: integer
+          example: 1
+          required: true
+        - in: path
+          name: member_id
+          schema:
+            type: integer
+          example: 1
+          required: true
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Delete application successfully"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        403:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/403"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+  /apps/members/search-for-invite:
+    get:
+      tags:
+        - Applications
+      summary: search members để invite vào application
+      externalDocs:
+        description: sheet "xử lí invite members"
+        url: https://alobridgevn.sharepoint.com/:x:/s/AlobridgeVN/ESfpFLcfqgpAg1w5gg_a9PgBa5JWWJT3CXYlQ7No2WIqew?e=ZELS7d
+      security:
+        - admin_auth: []
+      parameters:
+        - in: path
+          name: search
+          schema:
+            type: string
+          example: alobridge@gmail.com
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    email:
+                      type: string
+                    avatar:
+                      type: string
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        403:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/403"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+  /apps/{app_id}/share-link:
+    get:
+      tags:
+        - Applications
+      summary: chi tiết link share của application
+      externalDocs:
+        description: sheet "show Public link"
+        url: https://alobridgevn.sharepoint.com/:x:/s/AlobridgeVN/ESfpFLcfqgpAg1w5gg_a9PgBa5JWWJT3CXYlQ7No2WIqew?e=CMkEWl
+      security:
+        - admin_auth: []
+      parameters:
+        - in: path
+          name: app_id
+          schema:
+            type: integer
+          example: 1
+          required: true
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LinkShareDetail"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        403:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/403"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+    put:
+      tags:
+        - Applications
+      summary: Update link share của application
+      externalDocs:
+        description: sheet "xử lí update Public link "
+        url: https://alobridgevn.sharepoint.com/:x:/s/AlobridgeVN/ESfpFLcfqgpAg1w5gg_a9PgBa5JWWJT3CXYlQ7No2WIqew?e=CMkEWl
+      security:
+        - admin_auth: []
+      parameters:
+        - in: path
+          name: app_id
+          schema:
+            type: integer
+          example: 1
+          required: true
+      requestBody:
+        description: Gửi thông tin update lại link share của application
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                status:
+                  allOf:
+                    - $ref: "#/components/schemas/Status"
+                  required: true
+                password:
+                  type: string
+                  description: password của link share
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Update link share successfully"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        403:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/403"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        422:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/422"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+  /apps/view-by-share-link:
+    get:
+      tags:
+        - Applications
+      summary: Show link download build number version
+      externalDocs:
+        description: sheet "Xử lý ban đầu"
+        url: https://alobridgevn.sharepoint.com/:x:/s/AlobridgeVN/EVhTud70FZ5EktJXzzsiUDoBDGeVCKLNXtAqvAdDKl3qcA?e=UpCmYO
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          example: 408db062-ece1-4f64-a500-616b1c20a426
+          required: true
+        - in: query
+          name: password
+          schema:
+            type: string
+          example: 123456
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ios_build:
+                    $ref: "#/components/schemas/LinkBuildNumberDetail"
+                  android_build:
+                    $ref: "#/components/schemas/LinkBuildNumberDetail"
+
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+  /apps/{app_id}/get-download-link:
+    get:
+      tags:
+        - Applications
+      summary: download build number version
+      parameters:
+        - in: path
+          name: build_id
+          schema:
+            type: integer
+          example: 1
+          required: true
+        - in: path
+          name: password
+          schema:
+            type: string
+          example: 123456
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                download_link: "string"
+                example: "Http://cd.com/apps/download-by-token?token=xyz"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+  /apps/download-by-token:
+    get:
+      tags:
+        - Applications
+      summary: download build number version
+      parameters:
+        - in: path
+          name: token
+          schema:
+            type: string
+          example: "xyz"
+          required: true
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            file:
+              schema:
+                type: object
+                properties:
+                  file:
+                    type: string
+                    format: binary
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+  /members/:
+    get:
+      tags:
+        - Members
+      summary: Lấy danh sách member
+      operationId: get_member
+      externalDocs:
+        description: sheet "Xử lý ban đầu"
+        url: https://alobridgevn.sharepoint.com/:x:/r/sites/AlobridgeVN/_layouts/15/Doc.aspx?action=edit&sourcedoc=%7B3fdd5d85-ffe6-4158-a766-08218d2cab74%7D&wdOrigin=TEAMS-WEB.teamsSdk.openFilePreview&wdExp=TEAMS-CONTROL&web=1
+      security:
+        - admin_auth: []
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  members:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/MemberDetail"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        403:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/403"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+    post:
+      tags:
+        - Members
+      summary: Tạo member mới
+      operationId: create_member
+      externalDocs:
+        description: sheet "Xử lý create new member"
+        url: https://alobridgevn.sharepoint.com/:x:/r/sites/AlobridgeVN/_layouts/15/Doc.aspx?action=edit&sourcedoc=%7B3fdd5d85-ffe6-4158-a766-08218d2cab74%7D&wdOrigin=TEAMS-WEB.teamsSdk.openFilePreview&wdExp=TEAMS-CONTROL&web=1
+      security:
+        - admin_auth: []
+      requestBody:
+        description: Gửi thông tin để tạo mới member
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Tên của member (unique)
+                email:
+                  type: string
+                  description: Email của member (unique)
+                role:
+                  allOf:
+                    - $ref: "#/components/schemas/Role"
+                language:
+                  allOf:
+                    - $ref: "#/components/schemas/Language"
+              required:
+                - name
+                - email
+                - role
+                - language
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Create member successfully"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        403:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/403"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+  /members/{member_id}:
+    put:
+      tags:
+        - Members
+      summary: Update role member
+      operationId: update_member
+      externalDocs:
+        description: sheet "Xử lý update"
+        url: https://alobridgevn.sharepoint.com/:x:/r/sites/AlobridgeVN/_layouts/15/Doc.aspx?action=edit&sourcedoc=%7Bf64c37e6-5bdf-4347-8ee0-806fa7aa557f%7D&wdOrigin=TEAMS-WEB.teamsSdk.openFilePreview&wdExp=TEAMS-CONTROL&web=1
+      security:
+        - admin_auth: []
+      parameters:
+        - in: path
+          name: member_id
+          schema:
+            type: integer
+          example: 1
+          required: true
+      requestBody:
+        description: Gửi thông tin để update role của member
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role:
+                  allOf:
+                    - $ref: "#/components/schemas/Role"
+              required:
+                - role
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Update role member successfully"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        403:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/403"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+    delete:
+      tags:
+        - Members
+      summary: Delete member
+      operationId: delete_member
+      externalDocs:
+        description: sheet "Xử lý xóa"
+        url: https://alobridgevn.sharepoint.com/:x:/r/sites/AlobridgeVN/_layouts/15/Doc.aspx?action=edit&sourcedoc=%7Bf64c37e6-5bdf-4347-8ee0-806fa7aa557f%7D&wdOrigin=TEAMS-WEB.teamsSdk.openFilePreview&wdExp=TEAMS-CONTROL&web=1
+      security:
+        - admin_auth: []
+      parameters:
+        - in: path
+          name: member_id
+          schema:
+            type: integer
+          example: 1
+          required: true
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Delete member successfully"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        403:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/403"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+  /profile:
+    get:
+      tags:
+        - Profile
+      summary: Lấy thông tin profile
+      operationId: get_profile
+      externalDocs:
+        description: sheet "Xử lý ban đầu"
+        url: https://alobridgevn.sharepoint.com/:x:/r/sites/AlobridgeVN/_layouts/15/Doc.aspx?action=edit&sourcedoc=%7B55aec028-529c-4d27-a325-50cf8634d462%7D&wdOrigin=TEAMS-WEB.teamsSdk.openFilePreview&wdExp=TEAMS-CONTROL&web=1
+      security:
+        - user_auth: []
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileDetail"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+    put:
+      tags:
+        - Profile
+      summary: Update thông tin profile
+      operationId: update_profile
+      externalDocs:
+        description: sheet "Xử lý update"
+        url: https://alobridgevn.sharepoint.com/:x:/r/sites/AlobridgeVN/_layouts/15/Doc.aspx?action=edit&sourcedoc=%7B55aec028-529c-4d27-a325-50cf8634d462%7D&wdOrigin=TEAMS-WEB.teamsSdk.openFilePreview&wdExp=TEAMS-CONTROL&web=1
+      security:
+        - user_auth: []
+      requestBody:
+        description: Gửi thông tin update lại profile
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Tên người dùng
+                language:
+                  type: string
+                  description: Ngôn ngữ người dùng
+                avatar:
+                  type: string
+                  format: binary
+                  description: Ảnh đại diện
+              required:
+                - name
+
+      responses:
+        200:
+          description: リクエストが成功した場合（Request successfully）
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Update profile successfully"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+        404:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+        500:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500"
+components:
+  parameters:
+    page:
+      in: query
+      name: page
+      schema:
+        type: integer
+      required: true
+      example: 1
+    page_size:
+      in: query
+      name: page_size
+      schema:
+        type: integer
+      required: true
+      example: 20
+  schemas:
+    400:
+      type: object
+      properties:
+        message_id:
+          type: string
+          description: "Error code"
+          example: "9996E"
+        message:
+          type: string
+          description: "Error message"
+          example: "要求の形式が正しくありません"
+      description: "Bad request"
+    401:
+      type: object
+      properties:
+        message_id:
+          type: string
+          description: "Error code"
+          example: "9997E"
+        message:
+          type: string
+          description: "Error message"
+          example: "ログイン期限が切れました。"
+      description: "Unauthorized"
+    403:
+      type: object
+      properties:
+        message_id:
+          type: string
+          description: "Error code"
+          example: "9998E"
+        message:
+          type: string
+          description: "Error message"
+          example: "ログイン期限が切れました。"
+      description: "Forbidden"
+    404:
+      type: object
+      properties:
+        message_id:
+          type: string
+          description: "Error code"
+          example: "9995E"
+        message:
+          type: string
+          description: "Error message"
+          example: "存在しません"
+      description: "Not found"
+    422:
+      type: object
+      properties:
+        message_id:
+          type: string
+          description: "Error code"
+          example: "9998E"
+        message:
+          type: string
+          description: "Error message"
+          example: "入力内容が不正です。再度入力を確認してください。"
+        errors:
+          type: object
+          description: 各バリデーションエラー（các loại lỗi và nội dung lỗi）
+          example: { "email": "バリデーションエラー内容" }
+          properties:
+            key:
+              type: string
+            value:
+              type: string
+      description: "Unprocessable Entity"
+    500:
+      type: object
+      properties:
+        message_id:
+          type: string
+          description: "Error code"
+          example: "9999E"
+        message:
+          type: string
+          description: "Error message"
+          example: "システムエラーが発生しました。\n時間をおいて再度実行するか、システム管理者へ問合せください。"
+      description: "Internal server error"
+    ErrorMessageList:
+      externalDocs:
+        url: https://alobridgevn.sharepoint.com/:x:/r/sites/AlobridgeVN/_layouts/15/Doc.aspx?action=edit&sourcedoc=%7Be7b637d5-f5a4-4c54-ab7f-fff9022882b4%7D&wdOrigin=TEAMS-WEB.teamsSdk.openFilePreview&wdExp=TEAMS-CONTROL&web=1
+      type: array
+      items:
+        type: object
+        properties:
+          email_invalid:
+            type: string
+            description: "メールアドレスが不正です"
+    Role:
+      type: integer
+      enum: [0, 1]
+      description: >
+        - 0 - admin
+        - 1 - member
+    Language:
+      type: string
+      enum: [jp, en]
+      description: >
+        - jp - Ngôn ngữ Nhật
+        - en - Ngôn ngữ Anh
+    Status:
+      type: integer
+      enum: [0, 1]
+      description: >
+        - 0 - false
+        - 1 - true
+    ProfileDetail:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        avatar:
+          type: string
+        language:
+          allOf:
+            - $ref: "#/components/schemas/Language"
+    ApplicationDetail:
+      type: object
+      properties:
+        app_name:
+          type: string
+        ios_build_name:
+          type: string
+        android_build_name:
+          type: string
+    BuildNumberDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+        build_number:
+          type: integer
+        build_date:
+          type: string
+        bundle_id:
+          type: string
+        app_icon:
+          type: string
+    LinkShareDetail:
+      type: object
+      properties:
+        link:
+          type: string
+        password:
+          type: string
+        status:
+          allOf:
+            - $ref: "#/components/schemas/Status"
+    LinkBuildNumberDetail:
+      type: object
+      properties:
+        build_id:
+          type: integer
+        build_number:
+          type: string
+        version_number:
+          type: string
+    MemberDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        avatar:
+          type: string
+        role:
+          allOf:
+            - $ref: "#/components/schemas/Role"
+    PreviousBuildVersion:
+      type: object
+      properties:
+        ios_builds:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              build_number:
+                type: integer
+              build_date:
+                type: string
+              app_icon:
+                type: string
+              version_number:
+                type: string
+              version_code_number:
+                type: string
+        android_builds:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              build_number:
+                type: integer
+              build_date:
+                type: string
+              app_icon:
+                type: string
+              version_number:
+                type: string
+              version_code_number:
+                type: string
+    AccessToken:
+      type: object
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+        expires_at:
+          type: string
+    ApplicationShortDetail:
+      type: object
+      properties:
+        app_id:
+          type: integer
+        app_name:
+          type: string
+        iOS_build_number:
+          type: integer
+        android_build_number:
+          type: integer
+        app_icon:
+          type: string
+  securitySchemes:
+    user_auth:
+      type: http
+      scheme: bearer
+    admin_auth:
+      type: http
+      scheme: bearer
+    super_auth:
+      type: http
+      scheme: bearer
